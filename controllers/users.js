@@ -19,3 +19,17 @@ module.exports.getUsers = (req, res) => {
     .then((user) => res.send(user))
     .catch(() => res.status(500).send({ message: 'Произошла ошибка' }));
 };
+
+module.exports.updateUser = (req) => {
+  console.log(req.user._id);
+  // User.find({})
+  //   .then((users) => res.send(users))
+  //   .catch(() => res.status(500).send({ message: 'Произошла ошибка' }));
+};
+
+module.exports.updateAvatar = (req) => {
+  console.log(req.user._id);
+  // User.find({})
+  //   .then((users) => res.send(users))
+  //   .catch(() => res.status(500).send({ message: 'Произошла ошибка' }));
+};
