@@ -29,8 +29,6 @@ app.use((req, res, next) => {
 app.use('/', users);
 app.use('/', cards);
 
-
-
 app.listen(PORT, () => {
   console.log(`App listening on port ${PORT}`);
 });
