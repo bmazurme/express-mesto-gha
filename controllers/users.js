@@ -16,7 +16,7 @@ module.exports.getUsers = (req, res) => {
     .catch(() => res.status(500).send({ message: 'Произошла ошибка' }));
 };
 
-module.exports.getUsers = (req, res) => {
+module.exports.getUser = (req, res) => {
   User.findById(req.params.id)
     // eslint-disable-next-line consistent-return
     .then((user) => {
