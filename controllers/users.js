@@ -26,12 +26,15 @@ module.exports.getUser = (req, res) => {
   User.findById(req.params.id)
     // eslint-disable-next-line consistent-return
     .then((user) => {
-      // if (!user) {
-      //   return res.status(ERROR_CODE).send({ message: 'Запрашиваемый пользователь не найден' });
-      // }
       res.send(user);
     })
-    .catch(() => res.status(500).send({ message: 'Произошла ошибка' }));
+    // eslint-disable-next-line consistent-return
+    .catch((err) => {
+      if (err.name === 'CastError') {
+        return res.status(404).send({ message: 'пользователь не найден' });
+      }
+      res.status(500).send({ message: 'Произошла ошибка' });
+    });
 };
 
 module.exports.updateUser = (req) => {

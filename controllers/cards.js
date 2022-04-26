@@ -1,11 +1,19 @@
 const Card = require('../models/card');
 
+const ERROR_CODE = 400;
+
 module.exports.createCard = (req, res) => {
   const { name, link } = req.body;
 
   Card.create({ name, link })
     .then((card) => res.send(card))
-    .catch(() => res.status(500).send({ message: 'Произошла ошибка' }));
+    // eslint-disable-next-line consistent-return
+    .catch((err) => {
+      if (err.name === 'ValidationError') {
+        return res.status(ERROR_CODE).send({ message: 'переданы некорректные данные в метод' });
+      }
+      res.status(500).send({ message: 'Произошла ошибка' });
+    });
 };
 
 module.exports.getCards = (req, res) => {
