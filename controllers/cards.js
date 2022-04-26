@@ -14,7 +14,7 @@ module.exports.getCards = (req, res) => {
     .catch(() => res.status(500).send({ message: 'Произошла ошибка' }));
 };
 
-module.exports.deleteCards = (req, res) => {
+module.exports.deleteCard = (req, res) => {
   Card.findById(req.params.id)
     .then(() => {})
     .catch(() => res.status(500).send({ message: 'Произошла ошибка' }));

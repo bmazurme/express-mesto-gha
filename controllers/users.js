@@ -7,7 +7,13 @@ module.exports.createUser = (req, res) => {
 
   User.create({ name, about, avatar })
     .then((user) => res.send(user))
-    .catch(() => res.status(500).send({ message: 'Произошла ошибка' }));
+    // eslint-disable-next-line consistent-return
+    .catch((err) => {
+      if (err.name === 'ValidationError') {
+        return res.status(ERROR_CODE).send({ message: 'переданы некорректные данные в метод' });
+      }
+      res.status(500).send({ message: 'Произошла ошибка' });
+    });
 };
 
 module.exports.getUsers = (req, res) => {
@@ -20,9 +26,9 @@ module.exports.getUser = (req, res) => {
   User.findById(req.params.id)
     // eslint-disable-next-line consistent-return
     .then((user) => {
-      if (!user) {
-        return res.status(ERROR_CODE).send({ message: 'Запрашиваемый пользователь не найден' });
-      }
+      // if (!user) {
+      //   return res.status(ERROR_CODE).send({ message: 'Запрашиваемый пользователь не найден' });
+      // }
       res.send(user);
     })
     .catch(() => res.status(500).send({ message: 'Произошла ошибка' }));
