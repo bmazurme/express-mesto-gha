@@ -26,10 +26,14 @@ module.exports.getUser = (req, res) => {
   User.findById(req.params.id)
     // eslint-disable-next-line consistent-return
     .then((user) => {
+      // console.log('user');
+      // console.log(user);
       res.send(user);
     })
     // eslint-disable-next-line consistent-return
     .catch((err) => {
+      // console.log('err');
+      // console.log(err);
       if (err.name === 'CastError') {
         return res.status(404).send({ message: 'пользователь не найден' });
       }
