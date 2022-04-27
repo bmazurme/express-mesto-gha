@@ -28,14 +28,10 @@ module.exports.getUser = (req, res) => {
   User.findById(req.params.id)
     // eslint-disable-next-line consistent-return
     .then((user) => {
-      // console.log('user');
-      // console.log(user);
       res.send(user);
     })
     // eslint-disable-next-line consistent-return
     .catch((err) => {
-      // console.log('err');
-      // console.log(err);
       if (err.name === 'CastError') {
         return res.status(ERROR_NOT_FOUND_CODE).send({ message: 'пользователь не найден' });
       }
@@ -61,7 +57,13 @@ module.exports.updateUser = (req, res) => {
       }
       res.status(200).send(data);
     })
-    .catch(res.status(ERROR_DEFAULT_CODE).send({ message: 'Произошла ошибка' }));
+    // eslint-disable-next-line consistent-return
+    .catch((err) => {
+      if (err.name === 'CastError') {
+        return res.status(ERROR_WRONG_DATA_CODE).send({ message: 'переданы некорректные данные в метод' });
+      }
+      res.status(ERROR_DEFAULT_CODE).send({ message: 'Произошла ошибка' });
+    });
 };
 
 module.exports.updateAvatar = (req, res) => {
