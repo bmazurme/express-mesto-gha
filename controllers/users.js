@@ -28,6 +28,9 @@ module.exports.getUser = (req, res) => {
   User.findById(req.params.id)
     // eslint-disable-next-line consistent-return
     .then((user) => {
+      if (!user) {
+        res.status(ERROR_NOT_FOUND_CODE).send({ message: 'пользователь не найден' });
+      }
       res.send(user);
     })
     // eslint-disable-next-line consistent-return
