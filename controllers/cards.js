@@ -26,7 +26,13 @@ module.exports.getCards = (req, res) => {
 
 module.exports.deleteCard = (req, res) => {
   Card.findById(req.params.id)
-    .then(() => {})
+    // eslint-disable-next-line consistent-return
+    .then((card) => {
+      if (!card) {
+        return res.status(ERROR_NOT_FOUND_CODE).send({ message: 'карточка не найдена' });
+      }
+      res.status(200).send(card);
+    })
     .catch(() => res.status(ERROR_DEFAULT_CODE).send({ message: 'Произошла ошибка' }));
 };
 
