@@ -35,7 +35,7 @@ module.exports.deleteCard = (req, res) => {
     })
     // eslint-disable-next-line consistent-return
     .catch((err) => {
-      if (err.name === 'ValidationError') {
+      if (err.name === 'CastError') {
         return res.status(ERROR_WRONG_DATA_CODE).send({ message: 'переданы некорректные данные в метод' });
       }
       res.status(ERROR_DEFAULT_CODE).send({ message: 'Произошла ошибка' });
