@@ -24,7 +24,7 @@
     "url": "git+https://github.com/bmazurme/express-mesto-gha.git"
   },
   "keywords": [],
-  "author": "",
+  "author": "bmazurme",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/bmazurme/express-mesto-gha/issues"
