@@ -25,12 +25,17 @@ module.exports.getCards = (req, res) => {
 };
 
 module.exports.deleteCard = (req, res) => {
-  Card.findById(req.params.id)
+  Card.findByIdAndDelete(req.params.id)
     // eslint-disable-next-line consistent-return
     .then((card) => {
       if (!card) {
         return res.status(ERROR_NOT_FOUND_CODE).send({ message: 'карточка не найдена' });
       }
+      // Card.findByIdAndDelete(req.params._id)
+      // .then((cardData) => {
+      //   res.send( card );
+      // })
+      // .catch(next);
       res.status(200).send(card);
     })
     // eslint-disable-next-line consistent-return
