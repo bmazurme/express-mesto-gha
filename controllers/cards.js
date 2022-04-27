@@ -28,12 +28,18 @@ module.exports.deleteCard = (req, res) => {
   Card.findById(req.params.id)
     // eslint-disable-next-line consistent-return
     .then((card) => {
-      if (!card) {
-        return res.status(ERROR_NOT_FOUND_CODE).send({ message: 'карточка не найдена' });
-      }
+      // if (!card) {
+      //   return res.status(ERROR_NOT_FOUND_CODE).send({ message: 'карточка не найдена' });
+      // }
       res.status(200).send(card);
     })
-    .catch(() => res.status(ERROR_DEFAULT_CODE).send({ message: 'Произошла ошибка' }));
+    // eslint-disable-next-line consistent-return
+    .catch((err) => {
+      if (err.name === 'ValidationError') {
+        return res.status(ERROR_WRONG_DATA_CODE).send({ message: 'переданы некорректные данные в метод' });
+      }
+      res.status(ERROR_DEFAULT_CODE).send({ message: 'Произошла ошибка' });
+    });
 };
 
 module.exports.likeCard = (req, res) => Card.findByIdAndUpdate(
