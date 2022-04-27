@@ -42,11 +42,11 @@ module.exports.likeCard = (req, res) => Card.findByIdAndUpdate(
   { new: true },
 )
   // eslint-disable-next-line consistent-return
-  .then((card) => {
-    if (!card) {
+  .then((data) => {
+    if (!data) {
       return res.status(ERROR_NOT_FOUND_CODE).send({ message: 'карточка не найдена' });
     }
-    res.status(200).send(card);
+    res.status(200).send({ data });
   })
   .catch(() => res.status(ERROR_DEFAULT_CODE).send({ message: 'Произошла ошибка' }));
 
@@ -56,10 +56,10 @@ module.exports.dislikeCard = (req, res) => Card.findByIdAndUpdate(
   { new: true },
 )
   // eslint-disable-next-line consistent-return
-  .then((card) => {
-    if (!card) {
+  .then((data) => {
+    if (!data) {
       return res.status(ERROR_NOT_FOUND_CODE).send({ message: 'карточка не найдена' });
     }
-    res.status(200).send(card);
+    res.status(200).send({ data });
   })
   .catch(() => res.status(ERROR_DEFAULT_CODE).send({ message: 'Произошла ошибка' }));
