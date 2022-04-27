@@ -21,7 +21,7 @@ module.exports.createCard = (req, res) => {
 module.exports.getCards = (req, res) => {
   Card.find({})
     .then((card) => res.send(card))
-    .catch(() => res.status(500).send({ message: 'Произошла ошибка' }));
+    .catch(() => res.status(ERROR_DEFAULT_CODE).send({ message: 'Произошла ошибка' }));
 };
 
 module.exports.deleteCard = (req, res) => {
@@ -30,14 +30,18 @@ module.exports.deleteCard = (req, res) => {
     .catch(() => res.status(ERROR_DEFAULT_CODE).send({ message: 'Произошла ошибка' }));
 };
 
-module.exports.likeCard = (req) => Card.findByIdAndUpdate(
+module.exports.likeCard = (req, res) => Card.findByIdAndUpdate(
   req.params.cardId,
   { $addToSet: { likes: req.user._id } }, // добавить _id в массив, если его там нет
   { new: true },
-);
+)
+  .then(() => { res.status(200); })
+  .catch(() => res.status(ERROR_DEFAULT_CODE).send({ message: 'Произошла ошибка' }));
 
-module.exports.dislikeCard = (req) => Card.findByIdAndUpdate(
+module.exports.dislikeCard = (req, res) => Card.findByIdAndUpdate(
   req.params.cardId,
   { $pull: { likes: req.user._id } }, // убрать _id из массива
   { new: true },
-);
+)
+  .then(() => { res.status(200); })
+  .catch(() => res.status(ERROR_DEFAULT_CODE).send({ message: 'Произошла ошибка' }));
