@@ -59,7 +59,7 @@ module.exports.updateUser = (req, res) => {
       if (!data) {
         res.status(ERROR_NOT_FOUND_CODE).send({ message: 'пользователь не найден' });
       }
-      res.send(data);
+      res.status(200).send(data);
     })
     .catch(res.status(ERROR_DEFAULT_CODE).send({ message: 'Произошла ошибка' }));
 };
@@ -77,7 +77,7 @@ module.exports.updateAvatar = (req, res) => {
       if (!data) {
         res.status(ERROR_NOT_FOUND_CODE).send({ message: 'пользователь не найден' });
       }
-      res.send(data);
+      res.status(200).send(data);
     })
     .catch(res.status(ERROR_DEFAULT_CODE).send({ message: 'Произошла ошибка' }));
 };

@@ -8,7 +8,7 @@ module.exports.createCard = (req, res) => {
   const { name, link } = req.body;
 
   Card.create({ name, link })
-    .then((card) => res.send(card))
+    .then((card) => res.status(200).send(card))
     // eslint-disable-next-line consistent-return
     .catch((err) => {
       if (err.name === 'ValidationError') {
@@ -20,7 +20,7 @@ module.exports.createCard = (req, res) => {
 
 module.exports.getCards = (req, res) => {
   Card.find({})
-    .then((card) => res.send(card))
+    .then((card) => res.status(200).send(card))
     .catch(() => res.status(ERROR_DEFAULT_CODE).send({ message: 'Произошла ошибка' }));
 };
 
@@ -35,7 +35,7 @@ module.exports.likeCard = (req, res) => Card.findByIdAndUpdate(
   { $addToSet: { likes: req.user._id } }, // добавить _id в массив, если его там нет
   { new: true },
 )
-  .then(() => { res.status(200); })
+  .then((card) => { res.status(200).send(card); })
   .catch(() => res.status(ERROR_DEFAULT_CODE).send({ message: 'Произошла ошибка' }));
 
 module.exports.dislikeCard = (req, res) => Card.findByIdAndUpdate(
@@ -43,5 +43,5 @@ module.exports.dislikeCard = (req, res) => Card.findByIdAndUpdate(
   { $pull: { likes: req.user._id } }, // убрать _id из массива
   { new: true },
 )
-  .then(() => { res.status(200); })
+  .then((card) => { res.status(200).send(card); })
   .catch(() => res.status(ERROR_DEFAULT_CODE).send({ message: 'Произошла ошибка' }));
