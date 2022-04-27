@@ -1,20 +1,18 @@
-// module.exports = {
-//   env: {
-//     browser: true,
-//     es2021: true,
-//   },
-//   extends: [
-//     'airbnb-base',
-//   ],
-//   parserOptions: {
-//     ecmaVersion: 'latest',
-//     sourceType: 'module',
-//   },
-//   rules: {
-//     'no-underscore-dangle': 'off',
-//   },
-// };
 {
-  "extends": "airbnb-base", 
-  "rules": { "no-underscore-dangle": "off", },
-} 
+  "env": {
+    "browser": "true",
+    "es2021": "true",
+  },
+  "extends": [
+    "airbnb-base",
+  ],
+  "parserOptions": {
+    "ecmaVersion": "latest",
+    "sourceType": "module",
+  },
+  "rules": {
+    "no-underscore-dangle": "off",
+  },
+}
+
+
