@@ -84,5 +84,11 @@ module.exports.updateAvatar = (req, res) => {
       }
       res.status(200).send(data);
     })
-    .catch(res.status(ERROR_DEFAULT_CODE).send({ message: 'Произошла ошибка' }));
+    // eslint-disable-next-line consistent-return
+    .catch((err) => {
+      if (err.name === 'CastError') {
+        return res.status(ERROR_WRONG_DATA_CODE).send({ message: 'переданы некорректные данные в метод' });
+      }
+      res.status(ERROR_DEFAULT_CODE).send({ message: 'Произошла ошибка' });
+    });
 };
