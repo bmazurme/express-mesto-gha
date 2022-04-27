@@ -80,6 +80,6 @@ module.exports.dislikeCard = (req, res) => Card.findByIdAndUpdate(
     if (err.name === 'CastError') {
       return res.status(ERROR_WRONG_DATA_CODE).send({ message: 'переданы некорректные данные в метод' });
     }
-    console.log(err.name);
+    // console.log(err.name);
     res.status(ERROR_DEFAULT_CODE).send({ message: 'Произошла ошибка' });
   });

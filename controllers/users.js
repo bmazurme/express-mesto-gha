@@ -52,7 +52,7 @@ module.exports.updateUser = (req, res) => {
     },
     {
       new: true,
-      runValidators: true, // данные будут валидированы перед изменением
+      runValidators: true,
     },
   )
     .then((data) => {
