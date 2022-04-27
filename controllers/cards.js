@@ -28,9 +28,9 @@ module.exports.deleteCard = (req, res) => {
   Card.findById(req.params.id)
     // eslint-disable-next-line consistent-return
     .then((card) => {
-      // if (!card) {
-      //   return res.status(ERROR_NOT_FOUND_CODE).send({ message: 'карточка не найдена' });
-      // }
+      if (!card) {
+        return res.status(ERROR_NOT_FOUND_CODE).send({ message: 'карточка не найдена' });
+      }
       res.status(200).send(card);
     })
     // eslint-disable-next-line consistent-return
