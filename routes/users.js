@@ -14,9 +14,10 @@ const {
 // router.post('/signup', createUser);
 // router.post('/signin', login);
 router.get('/users', getUsers);
+router.get('/users/:id', getUsers);
 router.get('/users/me', getCurrentUser);
 router.get(
-  // '/users/:id',
+  '/users/:id',
   // celebrate({
   //   params: Joi.object().keys({
   //     userId: Joi.string().length(24).hex().required(),
