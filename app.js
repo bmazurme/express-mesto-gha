@@ -5,7 +5,7 @@ const bodyParser = require('body-parser');
 const users = require('./routes/users');
 const cards = require('./routes/cards');
 const auth = require('./middlewares/auth');
-// const { reg } = require('./utils/validator');
+const { reg } = require('./utils/validator');
 
 const {
   createUser,
@@ -34,7 +34,7 @@ app.post(
     body: Joi.object().keys({
       name: Joi.string().min(2).max(30),
       about: Joi.string().min(2).max(30),
-      // avatar: Joi.string().pattern(reg),
+      avatar: Joi.string().pattern(reg),
       email: Joi.string().required().email(),
       password: Joi.string().required(),
     }),
