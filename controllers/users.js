@@ -78,7 +78,7 @@ module.exports.getCurrentUser = (req, res) => {
     .catch(() => res.status(ERROR_DEFAULT_CODE).send({ message: 'Произошла ошибка' }));
 };
 
-module.exports.getUser = (req, res, next) => {
+module.exports.getUser = (req, res) => {
   User.findById(req.params.id)
     .then((user) => {
       if (!user) {
