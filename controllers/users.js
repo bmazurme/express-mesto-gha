@@ -7,7 +7,6 @@ const NotFoundError = require('../errors/NotFoundError');
 const {
   ERROR_DEFAULT_CODE,
   ERROR_UNAUTHORIZED_CODE,
-  ERROR_NOT_FOUND_CODE,
   ERROR_WRONG_DATA_CODE,
 } = require('../utils/constants');
 
@@ -110,7 +109,7 @@ module.exports.updateUser = (req, res, next) => {
   )
     .then((data) => {
       if (!data) {
-        return new NotFoundError();
+        return new NotFoundError('пользователь не найден');
       }
       return res.status(200).send(data);
     })
@@ -134,8 +133,7 @@ module.exports.updateAvatar = (req, res, next) => {
   )
     .then((data) => {
       if (!data) {
-        // return res.status(ERROR_NOT_FOUND_CODE).send({ message: 'пользователь не найден' });
-        return new NotFoundError();
+        return new NotFoundError('пользователь не найден');
       }
       return res.status(200).send(data);
     })
