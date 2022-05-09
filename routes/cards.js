@@ -22,12 +22,12 @@ router.post(
 router.get('/cards', getCards);
 router.delete(
   '/cards/:id',
-  validateObjectId,
+  // validateObjectId,
   deleteCard,
 );
 router.put(
   '/cards/:cardId/likes',
-  validateObjectId,
+  // validateObjectId,
   likeCard,
 );
 router.delete(
