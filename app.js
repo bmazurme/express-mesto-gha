@@ -16,7 +16,7 @@ const {
 } = require('./controllers/users');
 
 const { PORT = 3000 } = process.env;
-const ERROR_NOT_FOUND_CODE = 404;
+// const ERROR_NOT_FOUND_CODE = 404;
 
 const app = express();
 
@@ -45,9 +45,21 @@ app.use('/', auth, users);
 app.use('/', auth, cards);
 
 app.use(errors());
-app.use((req, res) => {
-  res.status(ERROR_NOT_FOUND_CODE).json({ message: 'страница не найдена' });
-});
+// app.use((req, res) => {
+//   res.status(ERROR_NOT_FOUND_CODE).json({ message: 'страница не найдена' });
+// });
+app.use(
+  errors(),
+  (err, req, res, next) => {
+    const {
+      statusCode = err.status,
+      message = err.message,
+    } = err;
+
+    res.status(statusCode).send({ message });
+    next();
+  },
+);
 
 app.listen(PORT, () => {
   console.log(`App listening on port ${PORT}`);
