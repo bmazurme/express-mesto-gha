@@ -4,12 +4,9 @@ const User = require('../models/user');
 const BadRequestError = require('../errors/BadRequestError');
 const NotFoundError = require('../errors/NotFoundError');
 const ConflictError = require('../errors/ConflictError');
+const UnauthorizedError = require('../errors/UnauthorizedError');
 
-const {
-  ERROR_UNAUTHORIZED_CODE,
-} = require('../utils/constants');
-
-module.exports.login = (req, res) => {
+module.exports.login = (req, res, next) => {
   const { email, password } = req.body;
 
   return User.findUserByCredentials(email, password)
@@ -24,9 +21,7 @@ module.exports.login = (req, res) => {
         // .send({ message: 'Успешная авторизация' });
         .send({ token });
     })
-    .catch((err) => {
-      res.status(ERROR_UNAUTHORIZED_CODE).send({ message: err.message });
-    });
+    .catch(() => next(new UnauthorizedError()));
 };
 
 module.exports.createUser = (req, res, next) => {
