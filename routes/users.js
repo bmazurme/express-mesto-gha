@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const { celebrate, Joi } = require('celebrate');
+// const { celebrate, Joi } = require('celebrate');
 // const { reg } = require('../utils/validator');
 const {
   // createUser,
@@ -16,23 +16,23 @@ const {
 router.get('/users', getUsers);
 router.get('/users/me', getCurrentUser);
 router.get(
-  '/users/:id',
-  celebrate({
-    params: Joi.object().keys({
-      userId: Joi.string().length(24).hex().required(),
-    }),
-  }),
+  // '/users/:id',
+  // celebrate({
+  //   params: Joi.object().keys({
+  //     userId: Joi.string().length(24).hex().required(),
+  //   }),
+  // }),
   getUser,
 );
 router.get('/users/me', updateUser);
 router.patch(
   '/users/me',
-  celebrate({
-    body: Joi.object().keys({
-      name: Joi.string().min(2).max(30),
-      about: Joi.string().min(2).max(30),
-    }),
-  }),
+  // celebrate({
+  //   body: Joi.object().keys({
+  //     name: Joi.string().min(2).max(30),
+  //     about: Joi.string().min(2).max(30),
+  //   }),
+  // }),
   updateUser,
 );
 router.patch(
