@@ -100,7 +100,8 @@ module.exports.getCurrentUser = (req, res) => {
 };
 
 module.exports.getUser = (req, res) => {
-  User.findById(req.params.id)
+  const { _id } = req.user;
+  User.findById(_id)
     .then((user) => {
       if (!user) {
         return res.status(ERROR_NOT_FOUND_CODE).send({ message: 'пользователь не найден' });
