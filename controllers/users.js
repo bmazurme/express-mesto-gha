@@ -1,6 +1,8 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/user');
+// const BadRequestError = require('../errors/BadRequestError');
+const NotFoundError = require('../errors/NotFoundError');
 
 const {
   ERROR_DEFAULT_CODE,
@@ -76,20 +78,24 @@ module.exports.getCurrentUser = (req, res) => {
     .catch(() => res.status(ERROR_DEFAULT_CODE).send({ message: 'Произошла ошибка' }));
 };
 
-module.exports.getUser = (req, res) => {
+module.exports.getUser = (req, res, next) => {
   User.findById(req.params.id)
     .then((user) => {
       if (!user) {
-        return res.status(ERROR_NOT_FOUND_CODE).send({ message: 'пользователь не найден' });
+        // return res.status(ERROR_NOT_FOUND_CODE).send({ message: 'пользователь не найден' });
+        return new NotFoundError('Пользователь не найден');
       }
       return res.send(user);
     })
-    .catch((err) => {
-      if (err.name === 'CastError') {
-        return res.status(ERROR_WRONG_DATA_CODE).send({ message: 'переданы некорректные данные в метод' });
-      }
-      return res.status(ERROR_DEFAULT_CODE).send({ message: 'Произошла ошибка' });
-    });
+    .catch(next);
+  // .catch((err) => {
+  //   if (err.name === 'CastError') {
+  //     return res.status(ERROR_WRONG_DATA_CODE)
+  // .send({ message: 'переданы некорректные данные в метод' });
+  //   }
+  //   //next();
+  //   return res.status(ERROR_DEFAULT_CODE).send({ message: 'Произошла ошибка' });
+  // });
 };
 
 module.exports.updateUser = (req, res) => {
