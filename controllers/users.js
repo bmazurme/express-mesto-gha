@@ -94,8 +94,8 @@ module.exports.getUsers = (req, res) => {
 };
 
 module.exports.getCurrentUser = (req, res) => {
-  User.find({})
-    .then((users) => res.send(users))
+  User.findById(req.user._id)
+    .then((user) => res.send(user))
     .catch(() => res.status(ERROR_DEFAULT_CODE).send({ message: 'Произошла ошибка' }));
 };
 
