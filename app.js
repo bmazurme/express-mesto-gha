@@ -31,9 +31,8 @@ app.post('/signup', createUser);
 app.use('/', auth, users);
 app.use('/', auth, cards);
 
-app.use((err, req, res, next) => {
+app.use((req, res) => {
   res.status(ERROR_NOT_FOUND_CODE).json({ message: 'страница не найдена' });
-  next();
 });
 
 app.listen(PORT, () => {
