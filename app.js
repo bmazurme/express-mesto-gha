@@ -14,9 +14,9 @@ const {
   createUser,
   login,
 } = require('./controllers/users');
+const NotFoundError = require('./errors/NotFoundError');
 
 const { PORT = 3000 } = process.env;
-// const ERROR_NOT_FOUND_CODE = 404;
 
 const app = express();
 
@@ -45,11 +45,10 @@ app.use('/', auth, users);
 app.use('/', auth, cards);
 
 app.use(errors());
-// app.use((req, res) => {
-//   res.status(ERROR_NOT_FOUND_CODE).json({ message: 'страница не найдена' });
-// });
+app.use(() => {
+  throw new NotFoundError('страница не найдена');
+});
 app.use(
-  errors(),
   (err, req, res, next) => {
     const {
       statusCode = err.status,
