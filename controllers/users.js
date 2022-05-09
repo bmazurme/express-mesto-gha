@@ -13,15 +13,16 @@ module.exports.login = (req, res) => {
   const { email, password } = req.body;
 
   return User.findUserByCredentials(email, password)
+    .then((user) => {
       const token = jwt.sign({ _id: user._id }, 'super-strong-secret', { expiresIn: '7d' });
       res
-        .cookie('jwt', token, {
-          maxAge: 3600000 * 24 * 7,
-          httpOnly: true,
-          sameSite: true,
-        })
-        .send({ message: 'Успешная авторизация' });
-      // .send({ token });
+        // .cookie('jwt', token, {
+        //   maxAge: 3600000 * 24 * 7,
+        //   httpOnly: true,
+        //   sameSite: true,
+        // })
+        // .send({ message: 'Успешная авторизация' });
+        .send({ token });
     })
     .catch((err) => {
       res.status(ERROR_UNAUTHORIZED_CODE).send({ message: err.message });
