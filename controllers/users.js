@@ -21,7 +21,7 @@ module.exports.login = (req, res, next) => {
         // .send({ message: 'Успешная авторизация' });
         .send({ token });
     })
-    .catch(() => next(new UnauthorizedError()));
+    .catch(() => next(new UnauthorizedError('авторизация с несуществующими email и password')));
 };
 
 module.exports.createUser = (req, res, next) => {
