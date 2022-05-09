@@ -3,11 +3,11 @@ const jwt = require('jsonwebtoken');
 const User = require('../models/user');
 const BadRequestError = require('../errors/BadRequestError');
 const NotFoundError = require('../errors/NotFoundError');
-const UnauthorizedError = require('../errors/UnauthorizedError');
+// const UnauthorizedError = require('../errors/UnauthorizedError');
 
 const {
   ERROR_DEFAULT_CODE,
-  // ERROR_UNAUTHORIZED_CODE,
+  ERROR_UNAUTHORIZED_CODE,
   // ERROR_NOT_FOUND_CODE,
   // ERROR_WRONG_DATA_CODE,
 } = require('../utils/constants');
@@ -28,8 +28,8 @@ module.exports.login = (req, res) => {
         .send({ token });
     })
     .catch((err) => {
-      throw new UnauthorizedError(err);
-      // res.status(ERROR_UNAUTHORIZED_CODE).send({ message: err.message });
+      // throw new UnauthorizedError(err);
+      res.status(ERROR_UNAUTHORIZED_CODE).send({ message: err.message });
     });
 };
 
@@ -59,7 +59,7 @@ module.exports.createUser = (req, res) => {
     }))
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        throw new BadRequestError();
+        return BadRequestError();
       }
       if (err.code === 11000) {
         return res.status(409).send({ message: 'добавление пользователя с существующим email' });
@@ -106,13 +106,13 @@ module.exports.updateUser = (req, res) => {
   )
     .then((data) => {
       if (!data) {
-        throw new NotFoundError();
+        return new NotFoundError();
       }
       return res.status(200).send(data);
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        throw new BadRequestError();
+        return new BadRequestError();
       }
       return res.status(ERROR_DEFAULT_CODE).send({ message: 'Произошла ошибка' });
     });
@@ -129,13 +129,13 @@ module.exports.updateAvatar = (req, res) => {
   )
     .then((data) => {
       if (!data) {
-        throw new NotFoundError();
+        return new NotFoundError();
       }
       return res.status(200).send(data);
     })
     .catch((err) => {
       if (err.name === 'CastError') {
-        throw new BadRequestError();
+        return new BadRequestError();
       }
       return res.status(ERROR_DEFAULT_CODE).send({ message: 'Произошла ошибка' });
     });
