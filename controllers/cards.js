@@ -1,7 +1,7 @@
 const Card = require('../models/card');
 const BadRequestError = require('../errors/BadRequestError');
 const NotFoundError = require('../errors/NotFoundError');
-const ConflictError = require('../errors/ConflictError');
+// const ConflictError = require('../errors/ConflictError');
 const {
   ERROR_DEFAULT_CODE,
   ERROR_NOT_FOUND_CODE,
@@ -99,4 +99,3 @@ module.exports.dislikeCard = (req, res, next) => Card.findByIdAndUpdate(
     next(err);
   })
   .catch(next);
-
