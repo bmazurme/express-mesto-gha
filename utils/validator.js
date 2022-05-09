@@ -12,7 +12,6 @@ const validateObjectId = celebrate({
   params: Joi.object().keys({
     id: StringRequired.custom((value) => {
       if (!isValidObjectId(value)) {
-        // throw new CelebrateError('Переданы некорректные данные');
         throw new BadRequestError('переданы некорректные данные');
       }
       return value;
@@ -20,4 +19,16 @@ const validateObjectId = celebrate({
   }),
 });
 
-module.exports = { isLink, reg, validateObjectId };
+const validateCardData = celebrate({
+  body: Joi.object().keys({
+    name: Joi.string().min(2).max(30).required(),
+    link: Joi.string().pattern(reg).required(),
+  }),
+});
+
+module.exports = {
+  isLink,
+  reg,
+  validateObjectId,
+  validateCardData,
+};
