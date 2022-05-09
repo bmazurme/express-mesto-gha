@@ -1,9 +1,10 @@
 const router = require('express').Router();
-const { celebrate, Joi } = require('celebrate');
-const { reg, validateObjectId } = require('../utils/validator');
 const {
-  // createUser,
-  // login,
+  validateObjectId,
+  validateAvatarData,
+  validateUserData,
+} = require('../utils/validator');
+const {
   getUsers,
   getUser,
   getCurrentUser,
@@ -11,11 +12,8 @@ const {
   updateAvatar,
 } = require('../controllers/users');
 
-// router.post('/signup', createUser);
-// router.post('/signin', login);
 router.get('/users', getUsers);
 router.get('/users/me', getCurrentUser);
-// router.get('/users/:id', getUsers);
 router.get(
   '/users/:id',
   validateObjectId,
@@ -24,21 +22,12 @@ router.get(
 
 router.patch(
   '/users/me',
-  celebrate({
-    body: Joi.object().keys({
-      name: Joi.string().min(2).max(30),
-      about: Joi.string().min(2).max(30),
-    }),
-  }),
+  validateUserData,
   updateUser,
 );
 router.patch(
   '/users/me/avatar',
-  celebrate({
-    body: Joi.object().keys({
-      avatar: Joi.string().pattern(reg).required(),
-    }),
-  }),
+  validateAvatarData,
   updateAvatar,
 );
 

@@ -43,11 +43,26 @@ const validateRegistrData = celebrate({
   }),
 });
 
+const validateAvatarData = celebrate({
+  body: Joi.object().keys({
+    avatar: Joi.string().pattern(reg).required(),
+  }),
+});
+
+const validateUserData = celebrate({
+  body: Joi.object().keys({
+    name: Joi.string().min(2).max(30),
+    about: Joi.string().min(2).max(30),
+  }),
+});
+
 module.exports = {
-  isLink,
-  reg,
+  // isLink,
+  // reg,
   validateObjectId,
   validateCardData,
   validateLoginData,
   validateRegistrData,
+  validateAvatarData,
+  validateUserData,
 };
