@@ -2,12 +2,12 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/user');
 // const BadRequestError = require('../errors/BadRequestError');
-// const NotFoundError = require('../errors/BadRequestError');
+const NotFoundError = require('../errors/BadRequestError');
 
 const {
   ERROR_DEFAULT_CODE,
   ERROR_UNAUTHORIZED_CODE,
-  ERROR_NOT_FOUND_CODE,
+  // ERROR_NOT_FOUND_CODE,
   ERROR_WRONG_DATA_CODE,
 } = require('../utils/constants');
 
@@ -82,8 +82,9 @@ module.exports.getUser = (req, res) => {
   User.findById(req.params.id)
     .then((user) => {
       if (!user) {
-        return res.status(ERROR_NOT_FOUND_CODE).send({ message: 'пользователь не найден' });
+        // return res.status(ERROR_NOT_FOUND_CODE).send({ message: 'пользователь не найден' });
         // next(new NotFoundError('Пользователь не найден'));
+        return new NotFoundError();
       }
       return res.send(user);
     })
@@ -110,7 +111,8 @@ module.exports.updateUser = (req, res) => {
   )
     .then((data) => {
       if (!data) {
-        return res.status(ERROR_NOT_FOUND_CODE).send({ message: 'пользователь не найден' });
+        // return res.status(ERROR_NOT_FOUND_CODE).send({ message: 'пользователь не найден' });
+        return new NotFoundError();
       }
       return res.status(200).send(data);
     })
@@ -133,7 +135,8 @@ module.exports.updateAvatar = (req, res) => {
   )
     .then((data) => {
       if (!data) {
-        return res.status(ERROR_NOT_FOUND_CODE).send({ message: 'пользователь не найден' });
+        // return res.status(ERROR_NOT_FOUND_CODE).send({ message: 'пользователь не найден' });
+        return new NotFoundError();
       }
       return res.status(200).send(data);
     })
