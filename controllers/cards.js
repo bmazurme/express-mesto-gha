@@ -1,4 +1,7 @@
 const Card = require('../models/card');
+const BadRequestError = require('../errors/BadRequestError');
+const NotFoundError = require('../errors/NotFoundError');
+const ConflictError = require('../errors/ConflictError');
 const {
   ERROR_DEFAULT_CODE,
   ERROR_NOT_FOUND_CODE,
@@ -78,20 +81,22 @@ module.exports.likeCard = (req, res) => Card.findByIdAndUpdate(
     return res.status(ERROR_DEFAULT_CODE).send({ message: 'Произошла ошибка' });
   });
 
-module.exports.dislikeCard = (req, res) => Card.findByIdAndUpdate(
+module.exports.dislikeCard = (req, res, next) => Card.findByIdAndUpdate(
   req.params.id,
   { $pull: { likes: req.user._id } },
   { new: true },
 )
   .then((data) => {
     if (!data) {
-      return res.status(ERROR_NOT_FOUND_CODE).send({ message: 'карточка не найдена' });
+      throw new NotFoundError('карточка не найдена');
     }
     return res.status(200).send({ data });
   })
   .catch((err) => {
     if (err.name === 'CastError') {
-      return res.status(ERROR_WRONG_DATA_CODE).send({ message: 'переданы некорректные данные в метод' });
+      throw new BadRequestError('переданы некорректные данные в метод');
     }
-    return res.status(ERROR_DEFAULT_CODE).send({ message: 'Произошла ошибка' });
-  });
+    next(err);
+  })
+  .catch(next);
+
