@@ -1,6 +1,6 @@
 const router = require('express').Router();
 const { celebrate, Joi } = require('celebrate');
-const { reg } = require('../utils/validator');
+const { reg, validateObjectId } = require('../utils/validator');
 const {
   // createUser,
   // login,
@@ -18,11 +18,7 @@ router.get('/users/me', getCurrentUser);
 // router.get('/users/:id', getUsers);
 router.get(
   '/users/:id',
-  // celebrate({
-  //   params: Joi.object().keys({
-  //     userId: Joi.string().length(24).hex().required(),
-  //   }),
-  // }),
+  validateObjectId,
   getUser,
 );
 
