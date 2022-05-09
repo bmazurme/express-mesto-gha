@@ -27,29 +27,6 @@ module.exports.login = (req, res) => {
     .catch((err) => {
       res.status(ERROR_UNAUTHORIZED_CODE).send({ message: err.message });
     });
-
-  // User.findOne({ email })
-  //   .then((user) => {
-  //     if (!user) {
-  //       return Promise.reject(new Error('Неправильные почта или пароль'));
-  //     }
-  //     return bcrypt.compare(password, user.password);
-  //   })
-  //   .then((matched) => {
-  //     if (!matched) {
-  //       // хеши не совпали — отклоняем промис
-  //       return Promise.reject(new Error('Неправильные почта или пароль'));
-  //     }
-  //     // аутентификация успешна
-  //     const token = jwt.sign({ _id: 'd285e3dceed844f902650f40' },
-  // 'super-strong-secret', { expiresIn: '7d' });
-  //     return res.send({ token });
-  //   })
-  //   .catch((err) => {
-  //     res
-  //       .status(ERROR_UNAUTHORIZED_CODE)
-  //       .send({ message: err.message });
-  //   });
 };
 
 module.exports.createUser = (req, res) => {
@@ -100,8 +77,7 @@ module.exports.getCurrentUser = (req, res) => {
 };
 
 module.exports.getUser = (req, res) => {
-  const { _id } = req.user;
-  User.findById(_id)
+  User.findById(req.params.id)
     .then((user) => {
       if (!user) {
         return res.status(ERROR_NOT_FOUND_CODE).send({ message: 'пользователь не найден' });
