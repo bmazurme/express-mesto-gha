@@ -31,7 +31,7 @@ module.exports.deleteCard = (req, res) => {
         return res.status(ERROR_NOT_FOUND_CODE).send({ message: 'карточка не найдена' });
       }
       if (card.owner.toString() !== req.user._id) {
-        return res.status(ERROR_NOT_FOUND_CODE).send({ message: 'access denied' });
+        return res.status(403).send({ message: 'access denied' });
       }
 
       Card.findByIdAndDelete(req.params.id)
@@ -63,20 +63,19 @@ module.exports.likeCard = (req, res) => Card.findByIdAndUpdate(
   { $addToSet: { likes: req.user._id } }, // добавить _id в массив, если его там нет
   { new: true },
 )
-  // eslint-disable-next-line consistent-return
   .then((data) => {
+    console.log(data);
     if (!data) {
       return res.status(ERROR_NOT_FOUND_CODE).send({ message: 'карточка не найдена' });
     }
-    res.status(200).send({ data });
+    return res.status(200).send({ data });
   })
-  // eslint-disable-next-line consistent-return
   .catch((err) => {
     if (err.name === 'CastError') {
       return res.status(ERROR_WRONG_DATA_CODE).send({ message: 'переданы некорректные данные в метод' });
     }
     console.log(err.name);
-    res.status(ERROR_DEFAULT_CODE).send({ message: 'Произошла ошибка' });
+    return res.status(ERROR_DEFAULT_CODE).send({ message: 'Произошла ошибка' });
   });
 
 module.exports.dislikeCard = (req, res) => Card.findByIdAndUpdate(
