@@ -2,7 +2,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/user');
 // const BadRequestError = require('../errors/BadRequestError');
-// const NotFoundError = require('../errors/BadRequestError');
+const NotFoundError = require('../errors/BadRequestError');
 
 const {
   ERROR_DEFAULT_CODE,
@@ -133,7 +133,8 @@ module.exports.updateAvatar = (req, res) => {
   )
     .then((data) => {
       if (!data) {
-        return res.status(ERROR_NOT_FOUND_CODE).send({ message: 'пользователь не найден' });
+        // return res.status(ERROR_NOT_FOUND_CODE).send({ message: 'пользователь не найден' });
+        throw new NotFoundError();
       }
       return res.status(200).send(data);
     })
