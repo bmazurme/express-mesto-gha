@@ -45,8 +45,13 @@ app.use('/', auth, users);
 app.use('/', auth, cards);
 
 app.use(errors());
-app.use((req, res) => {
-  res.status(ERROR_NOT_FOUND_CODE).json({ message: 'страница не найдена' });
+// app.use((req, res) => {
+//   res.status(ERROR_NOT_FOUND_CODE).json({ message: 'страница не найдена' });
+// });
+app.use((err, req, res, next) => {
+  const { statusCode = 500, message } = err;
+  res.status(statusCode).send({ message: statusCode === 500 ? 'ошибка сервера' : message });
+  next(err);
 });
 
 app.listen(PORT, () => {
