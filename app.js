@@ -1,11 +1,14 @@
 const express = require('express');
 const mongoose = require('mongoose');
-const { celebrate, errors, Joi } = require('celebrate');
+const { errors } = require('celebrate');
 const bodyParser = require('body-parser');
 const users = require('./routes/users');
 const cards = require('./routes/cards');
 const auth = require('./middlewares/auth');
-const { reg } = require('./utils/validator');
+const {
+  validateLoginData,
+  validateRegistrData,
+} = require('./utils/validator');
 
 const {
   createUser,
@@ -29,25 +32,12 @@ mongoose.connect('mongodb://localhost:27017/mestodb', {
 
 app.post(
   '/signin',
-  celebrate({
-    body: Joi.object().keys({
-      email: Joi.string().required().email(),
-      password: Joi.string().required(),
-    }),
-  }),
+  validateLoginData,
   login,
 );
 app.post(
   '/signup',
-  celebrate({
-    body: Joi.object().keys({
-      name: Joi.string().min(2).max(30),
-      about: Joi.string().min(2).max(30),
-      avatar: Joi.string().pattern(reg),
-      email: Joi.string().required().email(),
-      password: Joi.string().required(),
-    }),
-  }),
+  validateRegistrData,
   createUser,
 );
 
