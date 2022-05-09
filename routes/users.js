@@ -1,5 +1,6 @@
 const router = require('express').Router();
 const { celebrate, Joi } = require('celebrate');
+// const { reg } = require('../utils/validator');
 const {
   // createUser,
   // login,
@@ -34,6 +35,14 @@ router.patch(
   }),
   updateUser,
 );
-router.patch('/users/me/avatar', updateAvatar);
+router.patch(
+  '/users/me/avatar',
+  // celebrate({
+  //   body: Joi.object().keys({
+  //     avatar: Joi.string().pattern(reg).required(),
+  //   }),
+  // }),
+  updateAvatar,
+);
 
 module.exports = router;
