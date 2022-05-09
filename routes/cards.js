@@ -32,7 +32,7 @@ router.put(
 );
 router.delete(
   '/cards/:cardId/likes',
-  validateObjectId,
+  // validateObjectId,
   dislikeCard,
 );
 
