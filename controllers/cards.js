@@ -61,7 +61,7 @@ module.exports.deleteCard = (req, res) => {
     });
 };
 
-module.exports.likeCard = (req, res) => Card.findByIdAndUpdate(
+module.exports.likeCard = (req, res, next) => Card.findByIdAndUpdate(
   req.params.id,
   { $addToSet: { likes: req.user._id } }, // добавить _id в массив, если его там нет
   { new: true },
@@ -75,11 +75,11 @@ module.exports.likeCard = (req, res) => Card.findByIdAndUpdate(
   })
   .catch((err) => {
     if (err.name === 'CastError') {
-      return res.status(ERROR_WRONG_DATA_CODE).send({ message: 'переданы некорректные данные в метод' });
+      throw new BadRequestError('переданы некорректные данные в метод');
     }
-    console.log(err.name);
-    return res.status(ERROR_DEFAULT_CODE).send({ message: 'Произошла ошибка' });
-  });
+    next(err);
+  })
+  .catch(next);
 
 module.exports.dislikeCard = (req, res, next) => Card.findByIdAndUpdate(
   req.params.id,
