@@ -2,11 +2,12 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/user');
 const BadRequestError = require('../errors/BadRequestError');
-const NotFoundError = require('../errors/BadRequestError');
+const NotFoundError = require('../errors/NotFoundError');
+const UnauthorizedError = require('../errors/UnauthorizedError');
 
 const {
   ERROR_DEFAULT_CODE,
-  ERROR_UNAUTHORIZED_CODE,
+  // ERROR_UNAUTHORIZED_CODE,
   // ERROR_NOT_FOUND_CODE,
   // ERROR_WRONG_DATA_CODE,
 } = require('../utils/constants');
@@ -27,7 +28,8 @@ module.exports.login = (req, res) => {
         .send({ token });
     })
     .catch((err) => {
-      res.status(ERROR_UNAUTHORIZED_CODE).send({ message: err.message });
+      throw new UnauthorizedError(err);
+      // res.status(ERROR_UNAUTHORIZED_CODE).send({ message: err.message });
     });
 };
 
@@ -78,20 +80,21 @@ module.exports.getCurrentUser = (req, res) => {
     .catch(() => res.status(ERROR_DEFAULT_CODE).send({ message: 'Произошла ошибка' }));
 };
 
-module.exports.getUser = (req, res) => {
+module.exports.getUser = (req, res, next) => {
   User.findById(req.params.id)
     .then((user) => {
       if (!user) {
-        throw new NotFoundError();
+        throw new NotFoundError(404);
       }
       return res.send(user);
     })
-    .catch((err) => {
-      if (err.name === 'CastError') {
-        throw new BadRequestError();
-      }
-      return res.status(ERROR_DEFAULT_CODE).send({ message: 'Произошла ошибка' });
-    });
+    .catch((err) => next(err.name === 'CastError' ? new BadRequestError() : err));
+  // .catch((err) => {
+  //   if (err.name === 'CastError') {
+  //     throw new BadRequestError();
+  //   }
+  //   return res.status(ERROR_DEFAULT_CODE).send({ message: 'Произошла ошибка' });
+  // });
 };
 
 module.exports.updateUser = (req, res) => {
