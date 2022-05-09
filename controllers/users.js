@@ -69,7 +69,13 @@ module.exports.createUser = (req, res) => {
       email,
       password: hash,
     }))
-    .then((user) => res.send(user))
+    .then((user) => res.send({
+      _id: user._id,
+      name,
+      about,
+      avatar,
+      email,
+    }))
     .catch((err) => {
       if (err.name === 'ValidationError') {
         return res.status(ERROR_WRONG_DATA_CODE).send({ message: 'переданы некорректные данные в метод' });
