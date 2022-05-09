@@ -3,6 +3,12 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const users = require('./routes/users');
 const cards = require('./routes/cards');
+const auth = require('./middlewares/auth');
+
+const {
+  createUser,
+  login,
+} = require('./controllers/users');
 
 const { PORT = 3000 } = process.env;
 const ERROR_NOT_FOUND_CODE = 404;
@@ -19,18 +25,15 @@ mongoose.connect('mongodb://localhost:27017/mestodb', {
   // useFindAndModify: false,
 });
 
-// app.use('/users', require('./routes/users'));
-app.use((req, res, next) => {
-  req.user = {
-    _id: '6268496fe215d02525baacfa',
-  };
+app.post('/signin', login);
+app.post('/signup', createUser);
 
-  next();
-});
-app.use('/', users);
-app.use('/', cards);
-app.use((req, res) => {
+app.use('/', auth, users);
+app.use('/', auth, cards);
+
+app.use((err, req, res, next) => {
   res.status(ERROR_NOT_FOUND_CODE).json({ message: 'страница не найдена' });
+  next();
 });
 
 app.listen(PORT, () => {

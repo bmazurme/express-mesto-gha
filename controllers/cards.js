@@ -25,11 +25,29 @@ module.exports.getCards = (req, res) => {
 };
 
 module.exports.deleteCard = (req, res) => {
-  Card.findByIdAndDelete(req.params.id)
+  Card.findById(req.params.id)
     .then((card) => {
       if (!card) {
         return res.status(ERROR_NOT_FOUND_CODE).send({ message: 'карточка не найдена' });
       }
+      if (card.owner.toString() !== req.user._id) {
+        return res.status(ERROR_NOT_FOUND_CODE).send({ message: 'access denied' });
+      }
+
+      Card.findByIdAndDelete(req.params.id)
+        .then((crd) => {
+          if (!crd) {
+            return res.status(ERROR_NOT_FOUND_CODE).send({ message: 'карточка не найдена' });
+          }
+          return res.status(200).send(crd);
+        })
+        .catch((err) => {
+          if (err.name === 'CastError') {
+            return res.status(ERROR_WRONG_DATA_CODE).send({ message: 'переданы некорректные данные в метод' });
+          }
+          return res.status(ERROR_DEFAULT_CODE).send({ message: 'Произошла ошибка' });
+        });
+
       return res.status(200).send(card);
     })
     .catch((err) => {
