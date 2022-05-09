@@ -123,7 +123,7 @@ module.exports.updateUser = (req, res, next) => {
     .catch(next);
 };
 
-module.exports.updateAvatar = (req, res) => {
+module.exports.updateAvatar = (req, res, next) => {
   const { avatar } = req.body;
   User.findByIdAndUpdate(
     req.user._id,
@@ -134,15 +134,16 @@ module.exports.updateAvatar = (req, res) => {
   )
     .then((data) => {
       if (!data) {
-        return res.status(ERROR_NOT_FOUND_CODE).send({ message: 'пользователь не найден' });
-        // return new NotFoundError();
+        // return res.status(ERROR_NOT_FOUND_CODE).send({ message: 'пользователь не найден' });
+        return new NotFoundError();
       }
       return res.status(200).send(data);
     })
     .catch((err) => {
       if (err.name === 'CastError') {
-        return res.status(ERROR_WRONG_DATA_CODE).send({ message: 'переданы некорректные данные в метод' });
+        throw new BadRequestError();
       }
-      return res.status(ERROR_DEFAULT_CODE).send({ message: 'Произошла ошибка' });
-    });
+      next(err);
+    })
+    .catch(next);
 };
