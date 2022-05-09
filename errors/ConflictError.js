@@ -1,5 +1,5 @@
 class ConflictError extends Error {
-  constructor(message) {
+  constructor(message = 'HTTP 409 Conflict') {
     super(message);
     this.statusCode = 409;
   }
