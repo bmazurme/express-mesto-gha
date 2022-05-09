@@ -71,10 +71,21 @@ module.exports.getUsers = (req, res) => {
     .catch(() => res.status(ERROR_DEFAULT_CODE).send({ message: 'Произошла ошибка' }));
 };
 
-module.exports.getCurrentUser = (req, res) => {
+module.exports.getCurrentUser = (req, res, next) => {
   User.findById(req.user._id)
-    .then((user) => res.send(user))
-    .catch(() => res.status(ERROR_DEFAULT_CODE).send({ message: 'Произошла ошибка' }));
+    .then((user) => {
+      if (!user) {
+        throw new NotFoundError('пользователь не найден');
+      }
+      return res.send(user);
+    })
+    .catch((err) => {
+      if (err.name === 'CastError') {
+        throw new BadRequestError();
+      }
+      next(err);
+    })
+    .catch(next);
 };
 
 module.exports.getUser = (req, res, next) => {
