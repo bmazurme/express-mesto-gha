@@ -1,6 +1,9 @@
 const router = require('express').Router();
 const { celebrate, Joi } = require('celebrate');
-const { reg, validateObjectId } = require('../utils/validator');
+const {
+  reg,
+//  validateObjectId
+} = require('../utils/validator');
 const {
   createCard,
   getCards,
