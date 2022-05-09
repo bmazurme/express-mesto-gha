@@ -3,11 +3,10 @@ const jwt = require('jsonwebtoken');
 const User = require('../models/user');
 const BadRequestError = require('../errors/BadRequestError');
 const NotFoundError = require('../errors/NotFoundError');
+const ConflictError = require('../errors/ConflictError');
 
 const {
-  ERROR_DEFAULT_CODE,
   ERROR_UNAUTHORIZED_CODE,
-  ERROR_WRONG_DATA_CODE,
 } = require('../utils/constants');
 
 module.exports.login = (req, res) => {
@@ -30,7 +29,7 @@ module.exports.login = (req, res) => {
     });
 };
 
-module.exports.createUser = (req, res) => {
+module.exports.createUser = (req, res, next) => {
   const {
     name = 'Жак-Ив Кусто',
     about = 'Исследователь',
@@ -56,19 +55,31 @@ module.exports.createUser = (req, res) => {
     }))
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        return res.status(ERROR_WRONG_DATA_CODE).send({ message: 'переданы некорректные данные в метод' });
+        throw new BadRequestError();
       }
       if (err.code === 11000) {
-        return res.status(409).send({ message: 'добавление пользователя с существующим email' });
+        throw new ConflictError('добавление пользователя с существующим email');
       }
-      return res.status(ERROR_DEFAULT_CODE).send({ message: 'Произошла ошибка' });
-    });
+      next(err);
+    })
+    .catch(next);
 };
 
-module.exports.getUsers = (req, res) => {
+module.exports.getUsers = (req, res, next) => {
   User.find({})
-    .then((users) => res.send(users))
-    .catch(() => res.status(ERROR_DEFAULT_CODE).send({ message: 'Произошла ошибка' }));
+    .then((user) => {
+      if (!user) {
+        throw new NotFoundError('пользователь не найден');
+      }
+      return res.send(user);
+    })
+    .catch((err) => {
+      if (err.name === 'CastError') {
+        throw new BadRequestError();
+      }
+      next(err);
+    })
+    .catch(next);
 };
 
 module.exports.getCurrentUser = (req, res, next) => {
