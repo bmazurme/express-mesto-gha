@@ -1,7 +1,7 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/user');
-// const BadRequestError = require('../errors/BadRequestError');
+const BadRequestError = require('../errors/BadRequestError');
 const NotFoundError = require('../errors/NotFoundError');
 
 const {
@@ -87,15 +87,15 @@ module.exports.getUser = (req, res, next) => {
       }
       return res.send(user);
     })
-    .catch(next);
-  // .catch((err) => {
-  //   if (err.name === 'CastError') {
-  //     return res.status(ERROR_WRONG_DATA_CODE)
-  // .send({ message: 'переданы некорректные данные в метод' });
-  //   }
-  //   //next();
-  //   return res.status(ERROR_DEFAULT_CODE).send({ message: 'Произошла ошибка' });
-  // });
+    .catch((err) => {
+      if (err.name === 'CastError') {
+        return new BadRequestError('переданы некорректные данные в метод');
+        // res.status(ERROR_WRONG_DATA_CODE)
+        // .send({ message: 'переданы некорректные данные в метод' });
+      }
+      return next(err);
+      // return res.status(ERROR_DEFAULT_CODE).send({ message: 'Произошла ошибка' });
+    });
 };
 
 module.exports.updateUser = (req, res) => {
