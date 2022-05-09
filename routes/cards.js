@@ -2,8 +2,9 @@ const router = require('express').Router();
 const { celebrate, Joi } = require('celebrate');
 const {
   reg,
-//  validateObjectId
+  validateObjectId,
 } = require('../utils/validator');
+
 const {
   createCard,
   getCards,
@@ -25,17 +26,17 @@ router.post(
 router.get('/cards', getCards);
 router.delete(
   '/cards/:id',
-  // validateObjectId,
+  validateObjectId,
   deleteCard,
 );
 router.put(
-  '/cards/:cardId/likes',
-  // validateObjectId,
+  '/cards/:id/likes',
+  validateObjectId,
   likeCard,
 );
 router.delete(
-  '/cards/:cardId/likes',
-  // validateObjectId,
+  '/cards/:id/likes',
+  validateObjectId,
   dislikeCard,
 );
 

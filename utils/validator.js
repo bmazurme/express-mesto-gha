@@ -11,7 +11,6 @@ const isLink = (link) => reg.test(link);
 const validateObjectId = celebrate({
   params: Joi.object().keys({
     id: StringRequired.custom((value) => {
-      console.log(value);
       if (!isValidObjectId(value)) {
         // throw new CelebrateError('Переданы некорректные данные');
         throw new BadRequestError('переданы некорректные данные');
