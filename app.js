@@ -16,7 +16,7 @@ const {
 } = require('./controllers/users');
 
 const { PORT = 3000 } = process.env;
-const ERROR_NOT_FOUND_CODE = 404;
+// const ERROR_NOT_FOUND_CODE = 404;
 
 const app = express();
 
