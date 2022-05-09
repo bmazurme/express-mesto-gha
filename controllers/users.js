@@ -89,12 +89,6 @@ module.exports.getUser = (req, res, next) => {
       return res.send(user);
     })
     .catch((err) => next(err.name === 'CastError' ? new BadRequestError() : err));
-  // .catch((err) => {
-  //   if (err.name === 'CastError') {
-  //     throw new BadRequestError();
-  //   }
-  //   return res.status(ERROR_DEFAULT_CODE).send({ message: 'Произошла ошибка' });
-  // });
 };
 
 module.exports.updateUser = (req, res) => {
