@@ -83,13 +83,13 @@ module.exports.getUser = (req, res, next) => {
     .then((user) => {
       if (!user) {
         // return res.status(ERROR_NOT_FOUND_CODE).send({ message: 'пользователь не найден' });
-        return new NotFoundError('Пользователь не найден');
+        return new NotFoundError({ message: 'пользователь не найден' });
       }
       return res.send(user);
     })
     .catch((err) => {
       if (err.name === 'CastError') {
-        return new BadRequestError('переданы некорректные данные в метод');
+        return new BadRequestError({ message: 'переданы некорректные данные в метод' });
         // res.status(ERROR_WRONG_DATA_CODE)
         // .send({ message: 'переданы некорректные данные в метод' });
       }
