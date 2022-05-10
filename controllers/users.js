@@ -63,51 +63,48 @@ module.exports.getUsers = (req, res, next) => {
   User.find({})
     .then((user) => {
       if (!user) {
-        throw new NotFoundError('пользователь не найден');
+        next(new NotFoundError('пользователь не найден'));
       }
       return res.send(user);
     })
     .catch((err) => {
       if (err.name === 'CastError') {
-        throw new BadRequestError();
+        next(new BadRequestError());
       }
       next(err);
-    })
-    .catch(next);
+    });
 };
 
 module.exports.getCurrentUser = (req, res, next) => {
   User.findById(req.user._id)
     .then((user) => {
       if (!user) {
-        throw new NotFoundError('пользователь не найден');
+        next(new NotFoundError('пользователь не найден'));
       }
       return res.send(user);
     })
     .catch((err) => {
       if (err.name === 'CastError') {
-        throw new BadRequestError();
+        next(new BadRequestError());
       }
       next(err);
-    })
-    .catch(next);
+    });
 };
 
 module.exports.getUser = (req, res, next) => {
   User.findById(req.params.id)
     .then((user) => {
       if (!user) {
-        throw new NotFoundError('пользователь не найден');
+        next(NotFoundError('пользователь не найден'));
       }
       return res.send(user);
     })
     .catch((err) => {
       if (err.name === 'CastError') {
-        throw new BadRequestError();
+        next(new BadRequestError());
       }
       next(err);
-    })
-    .catch(next);
+    });
 };
 
 module.exports.updateUser = (req, res, next) => {
@@ -125,17 +122,16 @@ module.exports.updateUser = (req, res, next) => {
   )
     .then((data) => {
       if (!data) {
-        return new NotFoundError('пользователь не найден');
+        next(new NotFoundError('пользователь не найден'));
       }
       return res.status(200).send(data);
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        throw new BadRequestError();
+        next(new BadRequestError());
       }
       next(err);
-    })
-    .catch(next);
+    });
 };
 
 module.exports.updateAvatar = (req, res, next) => {
@@ -149,15 +145,14 @@ module.exports.updateAvatar = (req, res, next) => {
   )
     .then((data) => {
       if (!data) {
-        return new NotFoundError('пользователь не найден');
+        next(new NotFoundError('пользователь не найден'));
       }
       return res.status(200).send(data);
     })
     .catch((err) => {
       if (err.name === 'CastError') {
-        throw new BadRequestError();
+        next(new BadRequestError());
       }
       next(err);
-    })
-    .catch(next);
+    });
 };
