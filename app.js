@@ -44,10 +44,10 @@ app.post(
 app.use('/', auth, users);
 app.use('/', auth, cards);
 
-app.use(errors());
-app.use(() => {
+app.use('*', auth, () => {
   throw new NotFoundError('страница не найдена');
 });
+app.use(errors());
 app.use(
   (err, req, res, next) => {
     const {
