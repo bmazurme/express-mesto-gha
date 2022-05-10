@@ -50,14 +50,13 @@ module.exports.createUser = (req, res, next) => {
     }))
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        throw new BadRequestError();
+        next(new BadRequestError());
       }
       if (err.code === 11000) {
-        throw new ConflictError('добавление пользователя с существующим email');
+        next(new ConflictError('добавление пользователя с существующим email'));
       }
       next(err);
-    })
-    .catch(next);
+    });
 };
 
 module.exports.getUsers = (req, res, next) => {
