@@ -25,30 +25,33 @@ module.exports.getCards = (req, res, next) => {
 
 module.exports.deleteCard = (req, res, next) => {
   Card.findById(req.params.id)
+    .orFail(() => new NotFoundError('карточка не найдена'))
     .then((card) => {
-      if (!card) {
-        throw new NotFoundError('карточка не найдена');
+      if (!card.owner.equals(req.user._id)) {
+        return next(new ForbiddenError('access denied'));
       }
-      if (card.owner.toString() !== req.user._id) {
-        throw new ForbiddenError('access denied');
-      }
+      return card.remove()
+        .then(() => res.status(200)).send({ message: 'карточка удалена' });
+      // if (!card) {
+      //   throw new NotFoundError('карточка не найдена');
+      // }
 
-      Card.findByIdAndDelete(req.params.id)
-        .then((crd) => {
-          if (!crd) {
-            throw new NotFoundError('карточка не найдена');
-          }
-          return res.status(200).send(crd);
-        })
-        .catch((err) => {
-          if (err.name === 'CastError') {
-            throw new BadRequestError('переданы некорректные данные в метод');
-          }
-          next(err);
-        })
-        .catch(next);
+      // Card.findByIdAndDelete(req.params.id)
+      //   .then((crd) => {
+      //     if (!crd) {
+      //       throw new NotFoundError('карточка не найдена');
+      //     }
+      //     return res.status(200).send(crd);
+      //   })
+      //   .catch((err) => {
+      //     if (err.name === 'CastError') {
+      //       throw new BadRequestError('переданы некорректные данные в метод');
+      //     }
+      //     next(err);
+      //   })
+      //   .catch(next);
 
-      return res.status(200).send(card);
+      // return res.status(200).send(card);
     })
     .catch((err) => {
       if (err.name === 'CastError') {
