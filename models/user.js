@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 const validator = require('validator');
+const isUrl = require('validator/lib/isURL');
 
 const { Schema } = mongoose;
 
@@ -20,6 +21,10 @@ const userSchema = new Schema({
   avatar: {
     type: String,
     required: true,
+    validate: {
+      validator: (link) => isUrl(link),
+      message: 'некорректные данные',
+    },
   },
   email: {
     type: String,
