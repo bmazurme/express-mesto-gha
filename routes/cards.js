@@ -17,17 +17,21 @@ router.post(
   validateCardData,
   createCard,
 );
+
 router.get('/cards', getCards);
+
 router.delete(
   '/cards/:id',
   validateObjectId,
   deleteCard,
 );
+
 router.put(
   '/cards/:id/likes',
   validateObjectId,
   likeCard,
 );
+
 router.delete(
   '/cards/:id/likes',
   validateObjectId,

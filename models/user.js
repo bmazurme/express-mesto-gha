@@ -34,7 +34,7 @@ const userSchema = new Schema({
       validator(email) {
         return validator.isEmail(email);
       },
-      message: 'Введён некорректный email',
+      message: 'введён некорректный email',
     },
   },
   password: {
@@ -49,12 +49,12 @@ userSchema.statics.findUserByCredentials = function (email, password) {
     .select('+password')
     .then((user) => {
       if (!user) {
-        return Promise.reject(new Error('Неправильные почта или пароль'));
+        return Promise.reject(new Error('неправильные почта или пароль'));
       }
       return bcrypt.compare(password, user.password)
         .then((matched) => {
           if (!matched) {
-            return Promise.reject(new Error('Неправильные почта или пароль'));
+            return Promise.reject(new Error('неправильные почта или пароль'));
           }
           return user;
         });

@@ -13,7 +13,9 @@ const {
 } = require('../controllers/users');
 
 router.get('/users', getUsers);
+
 router.get('/users/me', getCurrentUser);
+
 router.get(
   '/users/:id',
   validateObjectId,
@@ -25,6 +27,7 @@ router.patch(
   validateUserData,
   updateUser,
 );
+
 router.patch(
   '/users/me/avatar',
   validateAvatarData,
