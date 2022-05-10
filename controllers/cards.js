@@ -10,11 +10,10 @@ module.exports.createCard = (req, res, next) => {
     .then((card) => res.status(200).send(card))
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        throw new BadRequestError('переданы некорректные данные в метод');
+        next(new BadRequestError('переданы некорректные данные в метод'));
       }
       next(err);
-    })
-    .catch(next);
+    });
 };
 
 module.exports.getCards = (req, res, next) => {
@@ -38,23 +37,22 @@ module.exports.deleteCard = (req, res, next) => {
 
 module.exports.likeCard = (req, res, next) => Card.findByIdAndUpdate(
   req.params.id,
-  { $addToSet: { likes: req.user._id } }, // добавить _id в массив, если его там нет
+  { $addToSet: { likes: req.user._id } },
   { new: true },
 )
   .then((data) => {
     console.log(data);
     if (!data) {
-      throw new NotFoundError('карточка не найдена');
+      next(new NotFoundError('карточка не найдена'));
     }
     return res.status(200).send({ data });
   })
   .catch((err) => {
     if (err.name === 'CastError') {
-      throw new BadRequestError('переданы некорректные данные в метод');
+      next(new BadRequestError('переданы некорректные данные в метод'));
     }
     next(err);
-  })
-  .catch(next);
+  });
 
 module.exports.dislikeCard = (req, res, next) => Card.findByIdAndUpdate(
   req.params.id,
@@ -69,8 +67,7 @@ module.exports.dislikeCard = (req, res, next) => Card.findByIdAndUpdate(
   })
   .catch((err) => {
     if (err.name === 'CastError') {
-      throw new BadRequestError('переданы некорректные данные в метод');
+      next(new BadRequestError('переданы некорректные данные в метод'));
     }
     next(err);
-  })
-  .catch(next);
+  });
