@@ -95,7 +95,7 @@ module.exports.getUser = (req, res, next) => {
   User.findById(req.params.id)
     .then((user) => {
       if (!user) {
-        next(NotFoundError('пользователь не найден'));
+        next(new NotFoundError('пользователь не найден'));
       }
       return res.send(user);
     })
