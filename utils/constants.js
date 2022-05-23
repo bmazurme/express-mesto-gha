@@ -11,3 +11,9 @@
 //   ERROR_NOT_FOUND_CODE,
 //   ERROR_DEFAULT_CODE,
 // };
+
+const SECRET = 'super-strong-secret';
+
+module.exports = {
+  SECRET,
+};
